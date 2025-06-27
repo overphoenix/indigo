@@ -18,14 +18,9 @@ type UnspeccedInitAgeAssurance_Input struct {
 	Language string `json:"language" cborgen:"language"`
 }
 
-// UnspeccedInitAgeAssurance_Output is the output of a app.bsky.unspecced.initAgeAssurance call.
-type UnspeccedInitAgeAssurance_Output struct {
-	Success bool `json:"success" cborgen:"success"`
-}
-
 // UnspeccedInitAgeAssurance calls the XRPC method "app.bsky.unspecced.initAgeAssurance".
-func UnspeccedInitAgeAssurance(ctx context.Context, c util.LexClient, input *UnspeccedInitAgeAssurance_Input) (*UnspeccedInitAgeAssurance_Output, error) {
-	var out UnspeccedInitAgeAssurance_Output
+func UnspeccedInitAgeAssurance(ctx context.Context, c util.LexClient, input *UnspeccedInitAgeAssurance_Input) (*UnspeccedDefs_AgeAssuranceState, error) {
+	var out UnspeccedDefs_AgeAssuranceState
 	if err := c.LexDo(ctx, util.Procedure, "application/json", "app.bsky.unspecced.initAgeAssurance", nil, input, &out); err != nil {
 		return nil, err
 	}

@@ -4,20 +4,10 @@ package bsky
 
 // schema: app.bsky.unspecced.defs
 
-// UnspeccedDefs_AgeAssuranceState is a "ageAssuranceState" in the app.bsky.unspecced.defs schema.
+// UnspeccedDefs_AgeAssuranceEvent is a "ageAssuranceEvent" in the app.bsky.unspecced.defs schema.
 //
-// The computed state of the age assurance process, returned to the user in question on certain authenticated requests.
-type UnspeccedDefs_AgeAssuranceState struct {
-	// status: The status of the age assurance process.
-	Status string `json:"status" cborgen:"status"`
-	// updatedAt: The timestamp when this state was last updated.
-	UpdatedAt string `json:"updatedAt" cborgen:"updatedAt"`
-}
-
-// UnspeccedDefs_AgeAssuranceStatePayload is a "ageAssuranceStatePayload" in the app.bsky.unspecced.defs schema.
-//
-// The raw payload written to secure storage.
-type UnspeccedDefs_AgeAssuranceStatePayload struct {
+// Object used to store age assurance data in stash.
+type UnspeccedDefs_AgeAssuranceEvent struct {
 	// attemptId: The unique identifier for this instance of the age assurance flow, in UUID format.
 	AttemptId *string `json:"attemptId,omitempty" cborgen:"attemptId,omitempty"`
 	Source    string  `json:"source" cborgen:"source"`
@@ -25,6 +15,16 @@ type UnspeccedDefs_AgeAssuranceStatePayload struct {
 	Status string `json:"status" cborgen:"status"`
 	// timestamp: The date and time of this write operation.
 	Timestamp string `json:"timestamp" cborgen:"timestamp"`
+}
+
+// UnspeccedDefs_AgeAssuranceState is a "ageAssuranceState" in the app.bsky.unspecced.defs schema.
+//
+// The computed state of the age assurance process, returned to the user in question on certain authenticated requests.
+type UnspeccedDefs_AgeAssuranceState struct {
+	// lastInitiatedAt: The timestamp when this state was last updated.
+	LastInitiatedAt *string `json:"lastInitiatedAt,omitempty" cborgen:"lastInitiatedAt,omitempty"`
+	// status: The status of the age assurance process.
+	Status string `json:"status" cborgen:"status"`
 }
 
 // UnspeccedDefs_SkeletonSearchActor is a "skeletonSearchActor" in the app.bsky.unspecced.defs schema.
