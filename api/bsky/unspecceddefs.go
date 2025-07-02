@@ -9,8 +9,9 @@ package bsky
 // Object used to store age assurance data in stash.
 type UnspeccedDefs_AgeAssuranceEvent struct {
 	// attemptId: The unique identifier for this instance of the age assurance flow, in UUID format.
-	AttemptId *string `json:"attemptId,omitempty" cborgen:"attemptId,omitempty"`
-	Source    string  `json:"source" cborgen:"source"`
+	AttemptId string `json:"attemptId" cborgen:"attemptId"`
+	// attemptIp: The IP address used for this age assurance flow.
+	AttemptIp *string `json:"attemptIp,omitempty" cborgen:"attemptIp,omitempty"`
 	// status: The status of the age assurance process.
 	Status string `json:"status" cborgen:"status"`
 	// timestamp: The date and time of this write operation.

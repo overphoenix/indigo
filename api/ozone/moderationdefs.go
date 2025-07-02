@@ -56,6 +56,22 @@ type ModerationDefs_AccountStats struct {
 	TakedownCount *int64 `json:"takedownCount,omitempty" cborgen:"takedownCount,omitempty"`
 }
 
+// ModerationDefs_AgeAssuranceEvent is a "ageAssuranceEvent" in the tools.ozone.moderation.defs schema.
+//
+// Set age assurance state of the subject. Only works on DID subjects.
+//
+// RECORDTYPE: ModerationDefs_AgeAssuranceEvent
+type ModerationDefs_AgeAssuranceEvent struct {
+	LexiconTypeID string `json:"$type,const=tools.ozone.moderation.defs#ageAssuranceEvent" cborgen:"$type,const=tools.ozone.moderation.defs#ageAssuranceEvent"`
+	// attemptId: An optional identifier for the age assurance attempt, typically coming from the AA provider.
+	AttemptId *string `json:"attemptId,omitempty" cborgen:"attemptId,omitempty"`
+	Comment   *string `json:"comment,omitempty" cborgen:"comment,omitempty"`
+	// source: The source of the age assurance information.
+	Source string `json:"source" cborgen:"source"`
+	// status: The age assurance status.
+	Status string `json:"status" cborgen:"status"`
+}
+
 // ModerationDefs_BlobView is a "blobView" in the tools.ozone.moderation.defs schema.
 type ModerationDefs_BlobView struct {
 	Cid        string                           `json:"cid" cborgen:"cid"`
@@ -358,6 +374,7 @@ type ModerationDefs_ModEventViewDetail_Event struct {
 	ModerationDefs_IdentityEvent           *ModerationDefs_IdentityEvent
 	ModerationDefs_RecordEvent             *ModerationDefs_RecordEvent
 	ModerationDefs_ModEventPriorityScore   *ModerationDefs_ModEventPriorityScore
+	ModerationDefs_AgeAssuranceEvent       *ModerationDefs_AgeAssuranceEvent
 }
 
 func (t *ModerationDefs_ModEventViewDetail_Event) MarshalJSON() ([]byte, error) {
@@ -437,6 +454,10 @@ func (t *ModerationDefs_ModEventViewDetail_Event) MarshalJSON() ([]byte, error) 
 		t.ModerationDefs_ModEventPriorityScore.LexiconTypeID = "tools.ozone.moderation.defs#modEventPriorityScore"
 		return json.Marshal(t.ModerationDefs_ModEventPriorityScore)
 	}
+	if t.ModerationDefs_AgeAssuranceEvent != nil {
+		t.ModerationDefs_AgeAssuranceEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceEvent"
+		return json.Marshal(t.ModerationDefs_AgeAssuranceEvent)
+	}
 	return nil, fmt.Errorf("cannot marshal empty enum")
 }
 func (t *ModerationDefs_ModEventViewDetail_Event) UnmarshalJSON(b []byte) error {
@@ -503,6 +524,9 @@ func (t *ModerationDefs_ModEventViewDetail_Event) UnmarshalJSON(b []byte) error 
 	case "tools.ozone.moderation.defs#modEventPriorityScore":
 		t.ModerationDefs_ModEventPriorityScore = new(ModerationDefs_ModEventPriorityScore)
 		return json.Unmarshal(b, t.ModerationDefs_ModEventPriorityScore)
+	case "tools.ozone.moderation.defs#ageAssuranceEvent":
+		t.ModerationDefs_AgeAssuranceEvent = new(ModerationDefs_AgeAssuranceEvent)
+		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceEvent)
 
 	default:
 		return nil
@@ -580,6 +604,7 @@ type ModerationDefs_ModEventView_Event struct {
 	ModerationDefs_IdentityEvent           *ModerationDefs_IdentityEvent
 	ModerationDefs_RecordEvent             *ModerationDefs_RecordEvent
 	ModerationDefs_ModEventPriorityScore   *ModerationDefs_ModEventPriorityScore
+	ModerationDefs_AgeAssuranceEvent       *ModerationDefs_AgeAssuranceEvent
 }
 
 func (t *ModerationDefs_ModEventView_Event) MarshalJSON() ([]byte, error) {
@@ -659,6 +684,10 @@ func (t *ModerationDefs_ModEventView_Event) MarshalJSON() ([]byte, error) {
 		t.ModerationDefs_ModEventPriorityScore.LexiconTypeID = "tools.ozone.moderation.defs#modEventPriorityScore"
 		return json.Marshal(t.ModerationDefs_ModEventPriorityScore)
 	}
+	if t.ModerationDefs_AgeAssuranceEvent != nil {
+		t.ModerationDefs_AgeAssuranceEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceEvent"
+		return json.Marshal(t.ModerationDefs_AgeAssuranceEvent)
+	}
 	return nil, fmt.Errorf("cannot marshal empty enum")
 }
 func (t *ModerationDefs_ModEventView_Event) UnmarshalJSON(b []byte) error {
@@ -725,6 +754,9 @@ func (t *ModerationDefs_ModEventView_Event) UnmarshalJSON(b []byte) error {
 	case "tools.ozone.moderation.defs#modEventPriorityScore":
 		t.ModerationDefs_ModEventPriorityScore = new(ModerationDefs_ModEventPriorityScore)
 		return json.Unmarshal(b, t.ModerationDefs_ModEventPriorityScore)
+	case "tools.ozone.moderation.defs#ageAssuranceEvent":
+		t.ModerationDefs_AgeAssuranceEvent = new(ModerationDefs_AgeAssuranceEvent)
+		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceEvent)
 
 	default:
 		return nil
@@ -939,6 +971,8 @@ type ModerationDefs_ReporterStats struct {
 type ModerationDefs_SubjectStatusView struct {
 	// accountStats: Statistics related to the account subject
 	AccountStats *ModerationDefs_AccountStats `json:"accountStats,omitempty" cborgen:"accountStats,omitempty"`
+	// ageAssuranceState: Current age assurance state of the subject.
+	AgeAssuranceState *string `json:"ageAssuranceState,omitempty" cborgen:"ageAssuranceState,omitempty"`
 	// appealed: True indicates that the a previously taken moderator action was appealed against, by the author of the content. False indicates last appeal was resolved by moderators.
 	Appealed *bool `json:"appealed,omitempty" cborgen:"appealed,omitempty"`
 	// comment: Sticky comment on the subject.
