@@ -58,18 +58,32 @@ type ModerationDefs_AccountStats struct {
 
 // ModerationDefs_AgeAssuranceEvent is a "ageAssuranceEvent" in the tools.ozone.moderation.defs schema.
 //
-// Set age assurance state of the subject. Only works on DID subjects.
+// Age assurance info coming directly from users. Only works on DID subjects.
 //
 // RECORDTYPE: ModerationDefs_AgeAssuranceEvent
 type ModerationDefs_AgeAssuranceEvent struct {
 	LexiconTypeID string `json:"$type,const=tools.ozone.moderation.defs#ageAssuranceEvent" cborgen:"$type,const=tools.ozone.moderation.defs#ageAssuranceEvent"`
-	// attemptId: An optional identifier for the age assurance attempt, typically coming from the AA provider.
-	AttemptId *string `json:"attemptId,omitempty" cborgen:"attemptId,omitempty"`
-	Comment   *string `json:"comment,omitempty" cborgen:"comment,omitempty"`
-	// source: The source of the age assurance information.
-	Source string `json:"source" cborgen:"source"`
-	// status: The age assurance status.
+	// attemptId: The unique identifier for this instance of the age assurance flow, in UUID format.
+	AttemptId string `json:"attemptId" cborgen:"attemptId"`
+	// attemptIp: The IP address used for this age assurance flow.
+	AttemptIp *string `json:"attemptIp,omitempty" cborgen:"attemptIp,omitempty"`
+	// createdAt: The date and time of this write operation.
+	CreatedAt string `json:"createdAt" cborgen:"createdAt"`
+	// status: The status of the age assurance process.
 	Status string `json:"status" cborgen:"status"`
+}
+
+// ModerationDefs_AgeAssuranceOverrideEvent is a "ageAssuranceOverrideEvent" in the tools.ozone.moderation.defs schema.
+//
+// Age assurance status override by moderators. Only works on DID subjects.
+//
+// RECORDTYPE: ModerationDefs_AgeAssuranceOverrideEvent
+type ModerationDefs_AgeAssuranceOverrideEvent struct {
+	LexiconTypeID string `json:"$type,const=tools.ozone.moderation.defs#ageAssuranceOverrideEvent" cborgen:"$type,const=tools.ozone.moderation.defs#ageAssuranceOverrideEvent"`
+	// comment: Comment describing the reason for the override.
+	Comment string `json:"comment" cborgen:"comment"`
+	// status: The status to be set for the user decided by a moderator, overriding whatever value the user had previously. Use reset to default to original state.
+	Status *string `json:"status,omitempty" cborgen:"status,omitempty"`
 }
 
 // ModerationDefs_BlobView is a "blobView" in the tools.ozone.moderation.defs schema.
@@ -355,26 +369,27 @@ type ModerationDefs_ModEventViewDetail struct {
 }
 
 type ModerationDefs_ModEventViewDetail_Event struct {
-	ModerationDefs_ModEventTakedown        *ModerationDefs_ModEventTakedown
-	ModerationDefs_ModEventReverseTakedown *ModerationDefs_ModEventReverseTakedown
-	ModerationDefs_ModEventComment         *ModerationDefs_ModEventComment
-	ModerationDefs_ModEventReport          *ModerationDefs_ModEventReport
-	ModerationDefs_ModEventLabel           *ModerationDefs_ModEventLabel
-	ModerationDefs_ModEventAcknowledge     *ModerationDefs_ModEventAcknowledge
-	ModerationDefs_ModEventEscalate        *ModerationDefs_ModEventEscalate
-	ModerationDefs_ModEventMute            *ModerationDefs_ModEventMute
-	ModerationDefs_ModEventUnmute          *ModerationDefs_ModEventUnmute
-	ModerationDefs_ModEventMuteReporter    *ModerationDefs_ModEventMuteReporter
-	ModerationDefs_ModEventUnmuteReporter  *ModerationDefs_ModEventUnmuteReporter
-	ModerationDefs_ModEventEmail           *ModerationDefs_ModEventEmail
-	ModerationDefs_ModEventResolveAppeal   *ModerationDefs_ModEventResolveAppeal
-	ModerationDefs_ModEventDivert          *ModerationDefs_ModEventDivert
-	ModerationDefs_ModEventTag             *ModerationDefs_ModEventTag
-	ModerationDefs_AccountEvent            *ModerationDefs_AccountEvent
-	ModerationDefs_IdentityEvent           *ModerationDefs_IdentityEvent
-	ModerationDefs_RecordEvent             *ModerationDefs_RecordEvent
-	ModerationDefs_ModEventPriorityScore   *ModerationDefs_ModEventPriorityScore
-	ModerationDefs_AgeAssuranceEvent       *ModerationDefs_AgeAssuranceEvent
+	ModerationDefs_ModEventTakedown          *ModerationDefs_ModEventTakedown
+	ModerationDefs_ModEventReverseTakedown   *ModerationDefs_ModEventReverseTakedown
+	ModerationDefs_ModEventComment           *ModerationDefs_ModEventComment
+	ModerationDefs_ModEventReport            *ModerationDefs_ModEventReport
+	ModerationDefs_ModEventLabel             *ModerationDefs_ModEventLabel
+	ModerationDefs_ModEventAcknowledge       *ModerationDefs_ModEventAcknowledge
+	ModerationDefs_ModEventEscalate          *ModerationDefs_ModEventEscalate
+	ModerationDefs_ModEventMute              *ModerationDefs_ModEventMute
+	ModerationDefs_ModEventUnmute            *ModerationDefs_ModEventUnmute
+	ModerationDefs_ModEventMuteReporter      *ModerationDefs_ModEventMuteReporter
+	ModerationDefs_ModEventUnmuteReporter    *ModerationDefs_ModEventUnmuteReporter
+	ModerationDefs_ModEventEmail             *ModerationDefs_ModEventEmail
+	ModerationDefs_ModEventResolveAppeal     *ModerationDefs_ModEventResolveAppeal
+	ModerationDefs_ModEventDivert            *ModerationDefs_ModEventDivert
+	ModerationDefs_ModEventTag               *ModerationDefs_ModEventTag
+	ModerationDefs_AccountEvent              *ModerationDefs_AccountEvent
+	ModerationDefs_IdentityEvent             *ModerationDefs_IdentityEvent
+	ModerationDefs_RecordEvent               *ModerationDefs_RecordEvent
+	ModerationDefs_ModEventPriorityScore     *ModerationDefs_ModEventPriorityScore
+	ModerationDefs_AgeAssuranceEvent         *ModerationDefs_AgeAssuranceEvent
+	ModerationDefs_AgeAssuranceOverrideEvent *ModerationDefs_AgeAssuranceOverrideEvent
 }
 
 func (t *ModerationDefs_ModEventViewDetail_Event) MarshalJSON() ([]byte, error) {
@@ -458,6 +473,10 @@ func (t *ModerationDefs_ModEventViewDetail_Event) MarshalJSON() ([]byte, error) 
 		t.ModerationDefs_AgeAssuranceEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceEvent"
 		return json.Marshal(t.ModerationDefs_AgeAssuranceEvent)
 	}
+	if t.ModerationDefs_AgeAssuranceOverrideEvent != nil {
+		t.ModerationDefs_AgeAssuranceOverrideEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceOverrideEvent"
+		return json.Marshal(t.ModerationDefs_AgeAssuranceOverrideEvent)
+	}
 	return nil, fmt.Errorf("cannot marshal empty enum")
 }
 func (t *ModerationDefs_ModEventViewDetail_Event) UnmarshalJSON(b []byte) error {
@@ -527,6 +546,9 @@ func (t *ModerationDefs_ModEventViewDetail_Event) UnmarshalJSON(b []byte) error 
 	case "tools.ozone.moderation.defs#ageAssuranceEvent":
 		t.ModerationDefs_AgeAssuranceEvent = new(ModerationDefs_AgeAssuranceEvent)
 		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceEvent)
+	case "tools.ozone.moderation.defs#ageAssuranceOverrideEvent":
+		t.ModerationDefs_AgeAssuranceOverrideEvent = new(ModerationDefs_AgeAssuranceOverrideEvent)
+		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceOverrideEvent)
 
 	default:
 		return nil
@@ -585,26 +607,27 @@ func (t *ModerationDefs_ModEventViewDetail_Subject) UnmarshalJSON(b []byte) erro
 }
 
 type ModerationDefs_ModEventView_Event struct {
-	ModerationDefs_ModEventTakedown        *ModerationDefs_ModEventTakedown
-	ModerationDefs_ModEventReverseTakedown *ModerationDefs_ModEventReverseTakedown
-	ModerationDefs_ModEventComment         *ModerationDefs_ModEventComment
-	ModerationDefs_ModEventReport          *ModerationDefs_ModEventReport
-	ModerationDefs_ModEventLabel           *ModerationDefs_ModEventLabel
-	ModerationDefs_ModEventAcknowledge     *ModerationDefs_ModEventAcknowledge
-	ModerationDefs_ModEventEscalate        *ModerationDefs_ModEventEscalate
-	ModerationDefs_ModEventMute            *ModerationDefs_ModEventMute
-	ModerationDefs_ModEventUnmute          *ModerationDefs_ModEventUnmute
-	ModerationDefs_ModEventMuteReporter    *ModerationDefs_ModEventMuteReporter
-	ModerationDefs_ModEventUnmuteReporter  *ModerationDefs_ModEventUnmuteReporter
-	ModerationDefs_ModEventEmail           *ModerationDefs_ModEventEmail
-	ModerationDefs_ModEventResolveAppeal   *ModerationDefs_ModEventResolveAppeal
-	ModerationDefs_ModEventDivert          *ModerationDefs_ModEventDivert
-	ModerationDefs_ModEventTag             *ModerationDefs_ModEventTag
-	ModerationDefs_AccountEvent            *ModerationDefs_AccountEvent
-	ModerationDefs_IdentityEvent           *ModerationDefs_IdentityEvent
-	ModerationDefs_RecordEvent             *ModerationDefs_RecordEvent
-	ModerationDefs_ModEventPriorityScore   *ModerationDefs_ModEventPriorityScore
-	ModerationDefs_AgeAssuranceEvent       *ModerationDefs_AgeAssuranceEvent
+	ModerationDefs_ModEventTakedown          *ModerationDefs_ModEventTakedown
+	ModerationDefs_ModEventReverseTakedown   *ModerationDefs_ModEventReverseTakedown
+	ModerationDefs_ModEventComment           *ModerationDefs_ModEventComment
+	ModerationDefs_ModEventReport            *ModerationDefs_ModEventReport
+	ModerationDefs_ModEventLabel             *ModerationDefs_ModEventLabel
+	ModerationDefs_ModEventAcknowledge       *ModerationDefs_ModEventAcknowledge
+	ModerationDefs_ModEventEscalate          *ModerationDefs_ModEventEscalate
+	ModerationDefs_ModEventMute              *ModerationDefs_ModEventMute
+	ModerationDefs_ModEventUnmute            *ModerationDefs_ModEventUnmute
+	ModerationDefs_ModEventMuteReporter      *ModerationDefs_ModEventMuteReporter
+	ModerationDefs_ModEventUnmuteReporter    *ModerationDefs_ModEventUnmuteReporter
+	ModerationDefs_ModEventEmail             *ModerationDefs_ModEventEmail
+	ModerationDefs_ModEventResolveAppeal     *ModerationDefs_ModEventResolveAppeal
+	ModerationDefs_ModEventDivert            *ModerationDefs_ModEventDivert
+	ModerationDefs_ModEventTag               *ModerationDefs_ModEventTag
+	ModerationDefs_AccountEvent              *ModerationDefs_AccountEvent
+	ModerationDefs_IdentityEvent             *ModerationDefs_IdentityEvent
+	ModerationDefs_RecordEvent               *ModerationDefs_RecordEvent
+	ModerationDefs_ModEventPriorityScore     *ModerationDefs_ModEventPriorityScore
+	ModerationDefs_AgeAssuranceEvent         *ModerationDefs_AgeAssuranceEvent
+	ModerationDefs_AgeAssuranceOverrideEvent *ModerationDefs_AgeAssuranceOverrideEvent
 }
 
 func (t *ModerationDefs_ModEventView_Event) MarshalJSON() ([]byte, error) {
@@ -688,6 +711,10 @@ func (t *ModerationDefs_ModEventView_Event) MarshalJSON() ([]byte, error) {
 		t.ModerationDefs_AgeAssuranceEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceEvent"
 		return json.Marshal(t.ModerationDefs_AgeAssuranceEvent)
 	}
+	if t.ModerationDefs_AgeAssuranceOverrideEvent != nil {
+		t.ModerationDefs_AgeAssuranceOverrideEvent.LexiconTypeID = "tools.ozone.moderation.defs#ageAssuranceOverrideEvent"
+		return json.Marshal(t.ModerationDefs_AgeAssuranceOverrideEvent)
+	}
 	return nil, fmt.Errorf("cannot marshal empty enum")
 }
 func (t *ModerationDefs_ModEventView_Event) UnmarshalJSON(b []byte) error {
@@ -757,6 +784,9 @@ func (t *ModerationDefs_ModEventView_Event) UnmarshalJSON(b []byte) error {
 	case "tools.ozone.moderation.defs#ageAssuranceEvent":
 		t.ModerationDefs_AgeAssuranceEvent = new(ModerationDefs_AgeAssuranceEvent)
 		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceEvent)
+	case "tools.ozone.moderation.defs#ageAssuranceOverrideEvent":
+		t.ModerationDefs_AgeAssuranceOverrideEvent = new(ModerationDefs_AgeAssuranceOverrideEvent)
+		return json.Unmarshal(b, t.ModerationDefs_AgeAssuranceOverrideEvent)
 
 	default:
 		return nil

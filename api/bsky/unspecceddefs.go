@@ -12,10 +12,10 @@ type UnspeccedDefs_AgeAssuranceEvent struct {
 	AttemptId string `json:"attemptId" cborgen:"attemptId"`
 	// attemptIp: The IP address used for this age assurance flow.
 	AttemptIp *string `json:"attemptIp,omitempty" cborgen:"attemptIp,omitempty"`
+	// createdAt: The date and time of this write operation.
+	CreatedAt string `json:"createdAt" cborgen:"createdAt"`
 	// status: The status of the age assurance process.
 	Status string `json:"status" cborgen:"status"`
-	// timestamp: The date and time of this write operation.
-	Timestamp string `json:"timestamp" cborgen:"timestamp"`
 }
 
 // UnspeccedDefs_AgeAssuranceState is a "ageAssuranceState" in the app.bsky.unspecced.defs schema.
