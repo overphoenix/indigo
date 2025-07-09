@@ -71,6 +71,8 @@ type ModerationDefs_AgeAssuranceEvent struct {
 	CreatedAt string `json:"createdAt" cborgen:"createdAt"`
 	// status: The status of the age assurance process.
 	Status string `json:"status" cborgen:"status"`
+	// userAgent: The user agent used for this age assurance flow.
+	UserAgent *string `json:"userAgent,omitempty" cborgen:"userAgent,omitempty"`
 }
 
 // ModerationDefs_AgeAssuranceOverrideEvent is a "ageAssuranceOverrideEvent" in the tools.ozone.moderation.defs schema.
